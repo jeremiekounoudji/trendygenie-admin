@@ -245,7 +245,7 @@ export async function getTransactionStats(): Promise<TransactionStatsResponse> {
       };
     }
 
-    const totalRevenue = revenueData?.reduce((sum, t) => sum + (t.amount || 0), 0) ?? 0;
+    const totalRevenue = revenueData?.reduce((sum: number, t: { amount: number | null }) => sum + (t.amount || 0), 0) ?? 0;
 
     return {
       stats: {
@@ -306,7 +306,7 @@ export async function getRevenueByProvider(): Promise<{
     // Aggregate by provider
     const providerMap = new Map<string, { revenue: number; count: number }>();
     
-    data?.forEach((t) => {
+    data?.forEach((t: { payment_provider: string | null; amount: number | null }) => {
       const provider = t.payment_provider || 'unknown';
       const existing = providerMap.get(provider) || { revenue: 0, count: 0 };
       providerMap.set(provider, {

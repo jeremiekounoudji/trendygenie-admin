@@ -3,10 +3,10 @@ import { supabase } from './supabase';
 import type { User, CreateUserInput } from '../types/user';
 import type { ApiError } from '../types/common';
 
-// Utility function to add timeout to promises
-function withTimeout<T>(promise: Promise<T>, timeoutMs: number = 10000): Promise<T> {
+// Utility function to add timeout to promises or thenable objects (like PostgrestBuilder)
+function withTimeout<T>(thenable: PromiseLike<T>, timeoutMs: number = 10000): Promise<T> {
   return Promise.race([
-    promise,
+    Promise.resolve(thenable),
     new Promise<T>((_, reject) => 
       setTimeout(() => reject(new Error(`Operation timed out after ${timeoutMs}ms`)), timeoutMs)
     )
